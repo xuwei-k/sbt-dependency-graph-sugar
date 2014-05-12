@@ -32,9 +32,9 @@ object DependencyGraph extends Plugin {
             Seq("dot", "-o" + targetSvgFileName.absolutePath, "-Tsvg", dotFile.absolutePath).!
             targetSvgFileName
         },
-        dependencySvgView <<= dependencySvg map {
-          (svgFile: File) =>
-            Seq("open", "-a", "Safari", svgFile.absolutePath).!
+        dependencySvgView <<= dependencyGraphOpenCommand map {
+          (cmd: Seq[String]) =>
+            cmd.!
             ()
         },
         dependencyGraphOpenCommand <<= dependencySvg map {
