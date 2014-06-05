@@ -19,4 +19,3 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.5" % "test"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
 
-net.virtualvoid.sbt.graph.Plugin.graphSettings
