@@ -1,8 +1,10 @@
 package gilt.dependency.graph.sugar
 
-import org.scalatest.{Matchers, FunSuite}
+import org.scalatest.FunSuite
+import org.scalatest.matchers.ShouldMatchers
 
-class CommandParserTest extends FunSuite with Matchers with CommandParser {
+
+class CommandParserTest extends FunSuite with ShouldMatchers with CommandParser {
 
   test("simple tokens") {
     parseAll(cmd, "open safari").get should equal(Seq("open", "safari"))
