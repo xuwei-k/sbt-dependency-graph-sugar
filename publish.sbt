@@ -14,13 +14,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra := (
-  <licenses>
-    <license>
-      <name>Apache2</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <url>git@github.com:gilt/sbt-dependency-graph-sugar.git</url>
     <connection>scm:git:git@github.com:gilt/sbt-dependency-graph-sugar.git</connection>
