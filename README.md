@@ -19,8 +19,9 @@ In the past at Gilt we had a monolithic build plugin that pulled in a bunch of t
 ### Usage
 
 `dependencySvg` creates a svg file into the target directory of the project
+`dependencySvgView` views the svg file in a browser
 
-By default, the svg file is opened using the command ``open -a Safari [path-to-svg]``. This should work well on a default Mac. You can change this behaviour by creating a file, ``~/.sbt/gilt/sbt-dependency-graph-sugar-command`` that holds a replacement command. The plugin will try to find the first line of the file that it can parse as a command, and it should have the token ``$1`` where the path to the svg file should go.  Example:
+By default, the svg file is opened using the command ``open -a Safari [path-to-svg]``. This should work well on a default Mac. You can change this behaviour by creating a file, ``~/.sbt/gilt/sbt-dependency-graph-sugar-cmd`` that holds a replacement command. The plugin will try to find the first line of the file that it can parse as a command, and it should have the token ``$1`` where the path to the svg file should go.  Example:
 
 	$ cat ~/.sbt/gilt/sbt-dependency-graph-sugar-cmd
 	open -a Google\ Chrome $1
