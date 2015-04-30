@@ -12,7 +12,8 @@ libraryDependencies <+= (sbtVersion in sbtPlugin, version) {
     }
 
     def sbtDependencyGraphVersion(sugarVersion: String) = {
-      sugarVersion.replaceFirst("-SNAPSHOT$", "")
+      val semVer = com.gilt.gfc.semver.SemVer(sugarVersion)
+      s"${semVer.major}.${semVer.minor}.${semVer.point}"
     }
     sbt.Defaults.sbtPluginExtra("net.virtual-void" % "sbt-dependency-graph" % sbtDependencyGraphVersion(sugarVersion), sbtV, scalaVersion(sbtV))
 }
