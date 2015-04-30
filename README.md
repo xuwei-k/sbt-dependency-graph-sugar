@@ -5,6 +5,8 @@ At Gilt we’ve come to love [sbt-dependency-graph](https://github.com/jrudolph/
 
 This plugin provides some “sugar” that makes life a bit nicer when you are running on a machine with [GraphViz](http://www.graphviz.org/) installed.
 
+Scripted tests status [![Circle CI](https://circleci.com/gh/gilt/sbt-dependency-graph-sugar/tree/master.svg?style=svg)](https://circleci.com/gh/gilt/sbt-dependency-graph-sugar/tree/master)
+
 ### Installation
 
 It is versioned the same as sbt-dependency-graph (so current version is 0.7.5), and if you include this plugin, you are pulling in sbt-dependency-graph automatically.
