@@ -4,7 +4,7 @@ name := "sbt-dependency-graph-sugar"
 
 organization := "com.gilt"
 
-version := "0.7.5"
+version := "0.7.5-SNAPSHOT"
 
 homepage := Some(url("http://github.com/gilt/sbt-dependency-graph-sugar"))
 
