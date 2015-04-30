@@ -21,3 +21,8 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.2" % "test"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
 
+scriptedLaunchOpts := {
+  println(s"Setting scripted version ${version.value}")
+  scriptedLaunchOpts.value ++
+    Seq("-Xmx1024M", "-XX:MaxPermSize=256M", "-Dplugin.version=" + version.value)
+}
