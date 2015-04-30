@@ -13,3 +13,12 @@ trait CommandParser extends RegexParsers {
   def token = quotedSpaceToken | escapedSpaceToken | simpleToken
   def cmd = rep1sep(token, "\\s+".r)
 }
+
+object CommandParser extends CommandParser {
+  def parse(line: String): Option[List[String]] = {
+    parseAll(cmd, line) match {
+      case Success(result, _) => Some(result)
+      case _ => None
+    }
+  }
+}

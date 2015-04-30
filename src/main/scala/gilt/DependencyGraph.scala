@@ -5,7 +5,9 @@ import sbt.Keys.streams
 import net.virtualvoid.sbt.graph
 import gilt.dependency.graph.sugar.CommandParser
 
-object DependencyGraph extends Plugin with CommandParser {
+object DependencyGraph extends Plugin {
+
+  lazy val parser = CommandParser
 
   override val projectSettings =
     graph.Plugin.graphSettings ++
@@ -34,10 +36,7 @@ object DependencyGraph extends Plugin with CommandParser {
       val cmdFile = file(sys.props("user.home")) / ".sbt" / "gilt" / "sbt-dependency-graph-sugar-cmd"
       (io.Source.fromFile(cmdFile).getLines() flatMap {
         line =>
-          parseAll(cmd, line) match {
-            case Success(result, _) => Some(result)
-            case _ => None
-          }
+          parser.parse(line)
       }).toSeq.headOption.getOrElse(DefaultCommand)
     } catch {
       case _: Exception => DefaultCommand
