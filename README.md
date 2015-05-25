@@ -29,6 +29,16 @@ By default, the svg file is opened using the command ``open -a Safari [path-to-s
 	$ cat ~/.sbt/gilt/sbt-dependency-graph-sugar-cmd
 	open -a Google\ Chrome $1
 
+The output format can be changed by setting the `dependencyGraphOutputFormat` key:
+
+```scala
+  dependencyGraphOutputFormat in Compile := "png"
+```
+
+This must include a configuration. There is a helper to modify the keys for all configs:
+
+`gilt.DependencyGraph.inConfigs(dependencyGraphOutputFormat := "png")`
+
 You can obviously put whatever command works on your particular OS, and as long as the `scala.sys.process._` machinery can run it, it should work fine.
 
 ### Credits
