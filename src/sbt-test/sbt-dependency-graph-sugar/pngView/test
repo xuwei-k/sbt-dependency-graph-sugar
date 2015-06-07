@@ -1,0 +1,4 @@
+> dependencyPngView
+
+$ exists target/dependencies-compile.png
+$ absent target/dependencies-compile.svg

@@ -3,7 +3,7 @@ package gilt
 import sbt._
 import sbt.Keys.streams
 import net.virtualvoid.sbt.graph
-import gilt.dependency.graph.sugar.CommandParser
+import gilt.dependency.graph.sugar.{Aliases, CommandParser}
 
 //TODO: limit stringly-typed format to valid types
 object DependencyGraph extends Plugin {
@@ -13,7 +13,7 @@ object DependencyGraph extends Plugin {
   val defaultFormat = "svg"
 
   override val projectSettings =
-    graph.Plugin.graphSettings ++ dependencyViewSettings
+    graph.Plugin.graphSettings ++ dependencyViewSettings ++ Aliases.installAliases
 
   lazy val dependencyGraphOutputFormat = SettingKey[String](
     "dependency-graph-output-format", 

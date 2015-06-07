@@ -1,0 +1,1 @@
+dependencyGraphOutputFormat in Compile := "png"
