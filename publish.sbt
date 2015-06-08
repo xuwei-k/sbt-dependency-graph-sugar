@@ -13,6 +13,8 @@ publishArtifact in Test := false
 
 pomIncludeRepository := { _ => false }
 
+sonatypeProfileName := "com.gilt"
+
 pomExtra := (
   <scm>
     <url>git@github.com:gilt/sbt-dependency-graph-sugar.git</url>
