@@ -5,31 +5,46 @@ import sbt.Keys.streams
 import net.virtualvoid.sbt.graph
 import gilt.dependency.graph.sugar.CommandParser
 
+//TODO: limit stringly-typed format to valid types
 object DependencyGraph extends Plugin {
 
   lazy val parser = CommandParser
 
-  override val projectSettings =
-    graph.Plugin.graphSettings ++
-      Seq(Compile, Test, Runtime, Provided, Optional).flatMap(addDependencySvgSettings)
+  val defaultFormat = "svg"
 
-  lazy val dependencySvg = TaskKey[File](
-    "dependency-svg",
-    "Creates an SVG file containing the dependency-graph for a project (based on dependency-dot, requires graphviz tools)"
+  override val projectSettings =
+    graph.Plugin.graphSettings ++ dependencyViewSettings
+
+  lazy val dependencyGraphOutputFormat = SettingKey[String](
+    "dependency-graph-output-format", 
+    "the format to pass to dot when generating the dependency graph"
   )
 
-  lazy val dependencySvgView = TaskKey[Unit](
-    "dependency-svg-view",
+  lazy val dependencyGraphRender = TaskKey[File](
+    "dependency-graph-render",
+    "Creates a file containing the dependency-graph for a project (based on dependency-dot, requires graphviz tools)"
+  )
+
+  lazy val dependencyGraphView = TaskKey[Unit](
+    "dependency-graph-view",
     "Displays jar dependencies in a browser, based on dependency-dot, requires graphviz tools)"
   )
 
   lazy val dependencyGraphOpenCommand = TaskKey[Seq[String]](
     "dependency-graph-open-command",
-    """command to be run to open the svg; default is Seq("open", "-a", "Safari", <dependencySvgFile>)""")
+    """command to be run to open the rendered graph; default is Seq("open", "-a", "Safari", <dependencyGraphFile>)""")
 
-  private val DefaultCommand = Seq("open", "-a", "Safari", "$1")
+  // helper that can be used to define a setting like 'dependencyGraphOutputFormat' for all relevant configurations
+  //   gilt.DependencyGraph.inConfigs(dependencyGraphOutputFormat := "png")
+  def inConfigs[T](keys: Seq[Setting[_]]) = {
+    configs.flatMap(inConfig(_)(keys))
+  }
 
-  private def openSvgCommand() = {
+  private lazy val configs = Seq(Compile, Test, Runtime, Provided, Optional)
+
+  private lazy val DefaultCommand = Seq("open", "-a", "Safari", "$1")
+
+  private def openFileCommand() = {
     // Try to open the file and pull out the first command we can actually parse,
     // falling back to the DefaultCommand if we can't do so successfully
     try {
@@ -43,34 +58,32 @@ object DependencyGraph extends Plugin {
     }
   }
 
-  private def addDependencySvgSettings(config: Configuration) =
-    inConfig(config) {
-      Seq(
-        dependencySvg <<= graph.Plugin.dependencyDot map {
-          (dotFile: File) =>
-            val targetSvgFileName: File = dotFile.getParentFile / (dotFile.base + ".svg")
-            Seq("dot", "-o" + targetSvgFileName.absolutePath, "-Tsvg", dotFile.absolutePath).!
-            targetSvgFileName
-        },
-        dependencySvgView <<= (dependencyGraphOpenCommand, streams) map {
-          (cmd: Seq[String], streams) =>
-            try {
-              cmd.!
-            } catch {
-              case ignore: Exception =>
-                streams.log.error("Could not run [" + cmd.mkString(" ") + "]: " + ignore)
-            }
-            ()
-        },
-        dependencyGraphOpenCommand <<= dependencySvg map {
-          svgFile => openSvgCommand().map {
-            token =>
-              if (token == "$1") svgFile.getAbsolutePath
-              else token
+  private lazy val dependencyViewSettings = inConfigs {
+    Seq(
+      dependencyGraphOutputFormat := defaultFormat,
+      dependencyGraphRender <<= (graph.Plugin.dependencyDot, dependencyGraphOutputFormat) map { 
+        (dotFile: File, format: String) =>
+          val targetFileName: File = dotFile.getParentFile / (dotFile.base + "." + format)
+          Seq("dot", "-o" + targetFileName.absolutePath, "-T" + format, dotFile.absolutePath).!
+          targetFileName
+      },
+      dependencyGraphView <<= (dependencyGraphOpenCommand, streams) map {
+        (cmd: Seq[String], streams) =>
+          try {
+            cmd.!
+          } catch {
+            case ignore: Exception =>
+              streams.log.error("Could not run [" + cmd.mkString(" ") + "]: " + ignore)
           }
+          ()
+      },
+      dependencyGraphOpenCommand <<= dependencyGraphRender map { file => 
+        openFileCommand().map { token =>
+          if (token == "$1") file.getAbsolutePath
+          else token
         }
-      )
-    }
-
+      }
+    )
+  }
 
 }
