@@ -13,7 +13,7 @@ object DependencyGraph extends Plugin {
   val defaultFormat = "svg"
 
   override val projectSettings =
-    graph.Plugin.graphSettings ++ dependencyViewSettings ++ Aliases.installAliases
+    graph.DependencyGraphSettings.graphSettings ++ dependencyViewSettings ++ Aliases.installAliases
 
   lazy val dependencyGraphOutputFormat = SettingKey[String](
     "dependency-graph-output-format", 
@@ -61,7 +61,7 @@ object DependencyGraph extends Plugin {
   private lazy val dependencyViewSettings = inConfigs {
     Seq(
       dependencyGraphOutputFormat := defaultFormat,
-      dependencyGraphRender <<= (graph.Plugin.dependencyDot, dependencyGraphOutputFormat) map { 
+      dependencyGraphRender <<= (graph.DependencyGraphKeys.dependencyDot, dependencyGraphOutputFormat) map {
         (dotFile: File, format: String) =>
           val targetFileName: File = dotFile.getParentFile / (dotFile.base + "." + format)
           Seq("dot", "-o" + targetFileName.absolutePath, "-T" + format, dotFile.absolutePath).!
