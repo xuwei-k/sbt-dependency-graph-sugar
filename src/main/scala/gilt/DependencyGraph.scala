@@ -8,7 +8,7 @@ import gilt.dependency.graph.sugar.{Aliases, CommandParser}
 //TODO: limit stringly-typed format to valid types
 object DependencyGraph extends Plugin {
 
-  lazy val parser = CommandParser
+  private[this] lazy val parser = CommandParser
 
   val defaultFormat = "svg"
 
@@ -40,11 +40,11 @@ object DependencyGraph extends Plugin {
     configs.flatMap(inConfig(_)(keys))
   }
 
-  private lazy val configs = Seq(Compile, Test, Runtime, Provided, Optional)
+  private[this] lazy val configs = Seq(Compile, Test, Runtime, Provided, Optional)
 
-  private lazy val DefaultCommand = Seq("open", "-a", "Safari", "$1")
+  private[this] lazy val DefaultCommand = Seq("open", "-a", "Safari", "$1")
 
-  private def openFileCommand() = {
+  private[this] def openFileCommand() = {
     // Try to open the file and pull out the first command we can actually parse,
     // falling back to the DefaultCommand if we can't do so successfully
     try {
@@ -58,7 +58,7 @@ object DependencyGraph extends Plugin {
     }
   }
 
-  private lazy val dependencyViewSettings = inConfigs {
+  private[this] lazy val dependencyViewSettings = inConfigs {
     Seq(
       dependencyGraphOutputFormat := defaultFormat,
       dependencyGraphRender <<= (graph.DependencyGraphKeys.dependencyDot, dependencyGraphOutputFormat) map {
