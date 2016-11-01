@@ -9,11 +9,11 @@ Scripted tests status [![Circle CI](https://circleci.com/gh/gilt/sbt-dependency-
 
 ### Installation
 
-Its version is taken from sbt-dependency-graph (current version is 0.7.5-1), and if you include this plugin, you are pulling in sbt-dependency-graph automatically.
+Its version is taken from sbt-dependency-graph (current version is 0.8.2), and if you include this plugin, you are pulling in sbt-dependency-graph automatically.
 
 Enable the plugin with the following configuration:
 ```scala
-addSbtPlugin("com.gilt" % "sbt-dependency-graph-sugar" % "0.7.5-1")
+addSbtPlugin("com.gilt" % "sbt-dependency-graph-sugar" % "0.8.2")
 ```
 
 In the past at Gilt we had a monolithic build plugin that pulled in a bunch of things by default, including this sugar.  We are now moving away from this approach.  Instead of putting this in your project’s ``project/plugins.sbt`` file, we recommend putting it once in your ``~/.sbt/0.13/plugins/sbt-dependency-graph-sugar.sbt`` file, so that it is available in all your apps and managed in the “per-machine plane” instead of per application. This way you can customize the command to view the svg to work always on a given machine.
