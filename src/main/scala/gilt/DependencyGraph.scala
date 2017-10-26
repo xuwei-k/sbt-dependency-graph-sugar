@@ -61,25 +61,26 @@ object DependencyGraph extends Plugin {
   private[this] lazy val dependencyViewSettings = inConfigs {
     Seq(
       dependencyGraphOutputFormat := defaultFormat,
-      dependencyGraphRender <<= (graph.DependencyGraphKeys.dependencyDot, dependencyGraphOutputFormat) map {
-        (dotFile: File, format: String) =>
-          val targetFileName: File = dotFile.getParentFile / (dotFile.base + "." + format)
-          Seq("dot", "-o" + targetFileName.absolutePath, "-T" + format, dotFile.absolutePath).!
-          targetFileName
+      dependencyGraphRender := {
+        val dotFile = graph.DependencyGraphKeys.dependencyDot.value
+        val format = dependencyGraphOutputFormat.value
+        val targetFileName: File = dotFile.getParentFile / (dotFile.base + "." + format)
+        Seq("dot", "-o" + targetFileName.absolutePath, "-T" + format, dotFile.absolutePath).!
+        targetFileName
       },
-      dependencyGraphView <<= (dependencyGraphOpenCommand, streams) map {
-        (cmd: Seq[String], streams) =>
-          try {
-            cmd.!
-          } catch {
-            case ignore: Exception =>
-              streams.log.error("Could not run [" + cmd.mkString(" ") + "]: " + ignore)
-          }
-          ()
+      dependencyGraphView := {
+        val cmd = dependencyGraphOpenCommand.value
+        try {
+          cmd.!
+        } catch {
+          case ignore: Exception =>
+            streams.value.log.error("Could not run [" + cmd.mkString(" ") + "]: " + ignore)
+        }
+        ()
       },
-      dependencyGraphOpenCommand <<= dependencyGraphRender map { file => 
+      dependencyGraphOpenCommand := {
         openFileCommand().map { token =>
-          if (token == "$1") file.getAbsolutePath
+          if (token == "$1") dependencyGraphRender.value.getAbsolutePath
           else token
         }
       }
