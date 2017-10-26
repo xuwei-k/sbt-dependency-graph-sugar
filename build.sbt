@@ -18,7 +18,7 @@ libraryDependencies <+= (sbtVersion in sbtPlugin, version) {
     sbt.Defaults.sbtPluginExtra("net.virtual-void" % "sbt-dependency-graph" % sbtDependencyGraphVersion(sugarVersion), sbtV, scalaVersion(sbtV))
 }
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.2" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
 
