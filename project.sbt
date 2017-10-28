@@ -1,3 +1,5 @@
+import scala.sys.process._
+
 sbtPlugin := true
 
 name := "sbt-dependency-graph-sugar"

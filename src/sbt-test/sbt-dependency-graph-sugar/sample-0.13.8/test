@@ -1,4 +1,0 @@
-> dependencyGraphView
-
-$ exists target/dependencies-compile.dot
-$ exists target/dependencies-compile.svg
